@@ -11,8 +11,6 @@ on:
         required: true
       codacy_project_token:
         required: true
-      _sca_tenant:
-        required: true
       _checkmarx_url:
         required: true
       _checkmarx_username:
@@ -27,11 +25,9 @@ on:
         required: true
       _sca_password:
         required: true
-      
 
 env:
   PACT_BROKER_BASE_URL: https://apply.pactflow.io
-  PACT_BROKER_TOKEN: ${{ secrets.pact_broker_token }}
 
 jobs:
   sec-tests:
@@ -83,8 +79,8 @@ jobs:
       - name: Can i deploy? (Pact verification)
         run: |
           docker run --rm --network host \
-          -e PACT_BROKER_BASE_URL=https://apply.pactflow.io \
-          -e PACT_BROKER_TOKEN=${{ env.pact_broker_token }} \
+          -e PACT_BROKER_BASE_URL=${{ env.PACT_BROKER_BASE_URL }} \
+          -e PACT_BROKER_TOKEN=${{ secrets.pact_broker_token }} \
           pactfoundation/pact-cli:latest \
           broker can-i-deploy \
           --pacticipant ${{ inputs.pact_participant }} \
