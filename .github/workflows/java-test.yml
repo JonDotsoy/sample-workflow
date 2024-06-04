@@ -43,7 +43,7 @@ jobs:
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.9
       with:
         project: ${{ github.repository }}-PR
-        team: "CxServer\\Liverpool\\Ecommerce\\Backend"
+        team: "CxServer/Liverpool/Ecommerce/Backend"
         checkmarx_url: ${{ secrets._checkmarx_url }}
         checkmarx_username: ${{ secrets._checkmarx_username }}
         checkmarx_password: ${{ secrets._checkmarx_password }}
