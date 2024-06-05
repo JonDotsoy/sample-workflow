@@ -71,8 +71,9 @@ jobs:
       - name: Integration tests
         run: ./gradlew integrationTest
 
-  sec-tests:
+  code_coverage:
     runs-on: ubuntu-latest
+    needs: test
     steps:
     - name: Download code coverage results
       uses: actions/download-artifact@v4
@@ -86,6 +87,9 @@ jobs:
         project-token: ${{ secrets.codacy_project_token }}
         coverage-reports: ${{ env.JACOCO_REPORT_PATH }}jacocoTestReport.xml
 
+  security_audit:
+    runs-on: ubuntu-latest
+    steps:
     - name: Checkmarx CxFlow Action
       uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.9
       with:
