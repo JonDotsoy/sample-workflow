@@ -100,7 +100,7 @@ jobs:
         checkmarx_password: ${{ secrets._checkmarx_password }}
         checkmarx_client_secret: ${{ secrets._checkmarx_client_secret }}
         incremental: false
-        break_build: false
+        break_build: true
         scanners: sca, sast
         sca_api_url: "https://api.scacheckmarx.com"
         sca_app_url: "https://sca.scacheckmarx.com"
