@@ -1,0 +1,80 @@
+name: Build and Publish
+
+on:
+  workflow_call:
+    inputs:
+      app_version:
+        type: string
+        required: true
+      app_release_name:
+        type: string
+        required: true
+      gcp_artifact_registry:
+        type: string
+        required: true
+        default: kata-demo-artifact-repo
+      gcp_project_id:
+        type: string
+        required: true
+      gcp_service_account:
+        type: string
+        default: terraform@liverpool-dev-421816.iam.gserviceaccount.com
+      gcp_cluster_name:
+        type: string
+        default: 'kata-demo-container-cluster'
+      location: 'us-east1'
+    secrets:
+      LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS:
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: ${{ inputs.version }}
+    environment: ${{ inputs.environment }}
+    env:
+      
+      APPLICATION_NAME: 'helloworld-service'
+      HELM_PATH: ./helm/platform-hola-mundoservice
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure GCP Credentials
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: ${{ inputs.project_id }}
+          service_account: ${{ inputs.service_account }}
+          credentials_json: ${{ secrets.LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: ${{ inputs.java_distribution }}
+          java-version: ${{ inputs.java_version }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.8
+
+      - name: Build and tests with Gradle
+        run: ./gradlew --console plain clean build test integrationTest
+      
+      - name: Login to GCP Artifact Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.location }}-docker.pkg.dev
+          username: _json_key
+          password: ${{ secrets.LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - name: Build, tag and push
+        uses: docker/build-push-action@v5
+        env:
+          IMAGE_TAG: ${GITHUB_SHA:0:7}
+          REGISTRY: ${{ inputs.gcp_artifact_registry }}/${{ inputs.app_release_name }}
+        with:
+          push: true
+          tags: $REGISTRY:$IMAGE_TAG
+          build-args: |
+            docker_image=$REGISTRY:$IMAGE_TAG
+            IMAGE_VERSION=$(grep appVersion "./gradle.properties" | cut -d '=' -f2)

@@ -6,6 +6,12 @@ on:
       pact_participant:
         type: string
         required: true
+      java_version:
+        type: string
+        default: 21
+      java_distribution:
+        type: string
+        default: zulu
     secrets:
       pact_broker_token:
         required: true
@@ -37,11 +43,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
-          java-version: 17
-          distribution: 'zulu'
+          distribution: ${{ inputs.java_distribution }}
+          java-version: ${{ inputs.java_version }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.8
 
       - name: Unit tests (including Pact)
         run: ./gradlew test -DpactPublishResults=true
