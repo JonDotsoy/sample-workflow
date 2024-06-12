@@ -1,0 +1,117 @@
+name: Publish
+
+on:
+  workflow_call:
+    inputs:
+      target_environment:
+        type: environment
+        default: Development
+        required: true
+        choice:
+          - Development
+          - Staging
+          - Production
+      app_image_url:
+        type: string
+        default: kata-demo-artifact-repo
+        required: true
+      app_release_name:
+        type: string
+        required: true
+      k8s_namespace:
+        type: string
+        required: true
+      gcp_project_id:
+        type: string
+        required: true
+      gcp_service_account:
+        type: string
+        default: terraform@liverpool-dev-421816.iam.gserviceaccount.com
+      gcp_cluster_name:
+        type: string
+        default: 'kata-demo-container-cluster'
+        required: true
+      gcp_location:
+        type: string
+        default: 'us-east1'
+        required: true
+      helm_repository:
+        type: string
+        default: 
+      helm_chart_version:
+        type: string
+        default: 1.0.0
+        required: true
+      helm_wait:
+        type: boolean
+        default: true
+      helm_atomic:
+        type: boolean
+        default: false
+      helm_values:
+        type: string
+        description: "Path to helm values yaml file"
+        required: false
+    secrets:
+      LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS:
+        required: true
+
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: ${{ inputs.version }}
+    environment: ${{ inputs.target_environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure GCP Credentials
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: ${{ inputs.gcp_project_id }}
+          service_account: ${{ inputs.gcp_service_account }}
+          credentials_json: ${{ secrets.LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS }}
+
+      - id: get-credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ inputs.gcp_cluster_name }}
+          location: ${{ inputs.gcp_location }}
+
+      - name: Deploy
+        shell: bash
+        env:
+          wait_enabled: {{ inputs.helm_wait }}
+          atomic_enabled: {{ inputs.helm_atomic }}
+          helm_values: {{ inputs.helm_values }}
+        run: |
+          cmd="helm upgrade ${{ inputs.app_release_name }} ${{ inputs.helm_repository }}"
+          cmd += " --version $CHART_VERSION"
+          cmd += " --namespace ${{ inputs.k8s_namespace }}"
+          cmd += " --set deployment.image.repository=${{ inputs.app_image_url }}"
+          cmd += " --set-string deployment.image.tag=${{ inputs.app_image_version }}"
+          cmd += " --install"
+            
+          if [[ -n $helm_values ]]; then
+            cmd += " --values $helm_values"
+          fi
+          
+          if [[ $wait_enabled == true ]]; then
+            cmd += " --wait"
+          fi
+          
+          if [[ $atomic_enabled == true ]]; then
+            cmd += " --atomic"
+          fi
+          
+            
+          echo $cmd
+          eval $cmd
+
+          # Check if it was successful
+          if [ $? -eq 0 ]; then
+            echo "The command was successful: $cmd"
+          else
+            echo "The command failed: $cmd"
+          fi
