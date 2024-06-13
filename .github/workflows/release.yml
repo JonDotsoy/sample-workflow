@@ -3,14 +3,12 @@ name: Publish
 on:
   workflow_call:
     inputs:
-      target_environment:
-        type: environment
-        default: Development
+      environment:
+        type: string
         required: true
-        choice:
-          - Development
-          - Staging
-          - Production
+      app_image_version:
+        type: string
+        required: true
       app_image_url:
         type: string
         default: kata-demo-artifact-repo
@@ -26,10 +24,9 @@ on:
         required: true
       gcp_service_account:
         type: string
-        default: terraform@liverpool-dev-421816.iam.gserviceaccount.com
+        required: true
       gcp_cluster_name:
         type: string
-        default: 'kata-demo-container-cluster'
         required: true
       gcp_location:
         type: string
@@ -43,11 +40,11 @@ on:
         default: 1.0.0
         required: true
       helm_wait:
-        type: boolean
-        default: true
+        type: string
+        default: 'true'
       helm_atomic:
-        type: boolean
-        default: false
+        type: string
+        default: 'false'
       helm_values:
         type: string
         description: "Path to helm values yaml file"
@@ -56,12 +53,10 @@ on:
       LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS:
         required: true
 
-
 jobs:
-  publish:
+  deploy:
     runs-on: ubuntu-latest
-    name: ${{ inputs.version }}
-    environment: ${{ inputs.target_environment }}
+    name: Deploy to ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -79,32 +74,41 @@ jobs:
           cluster_name: ${{ inputs.gcp_cluster_name }}
           location: ${{ inputs.gcp_location }}
 
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Log in to Artifact Repository
+        run: |
+          gcloud auth application-default print-access-token | helm registry login \
+            -u oauth2accesstoken \
+            --password-stdin https://${{ inputs.helm_repository }}
+
       - name: Deploy
         shell: bash
         env:
-          wait_enabled: {{ inputs.helm_wait }}
-          atomic_enabled: {{ inputs.helm_atomic }}
-          helm_values: {{ inputs.helm_values }}
+          wait_enabled: ${{ inputs.helm_wait }}
+          atomic_enabled: ${{ inputs.helm_atomic }}
+          helm_values: ${{ inputs.helm_values }}
         run: |
-          cmd="helm upgrade ${{ inputs.app_release_name }} ${{ inputs.helm_repository }}"
-          cmd += " --version $CHART_VERSION"
-          cmd += " --namespace ${{ inputs.k8s_namespace }}"
-          cmd += " --set deployment.image.repository=${{ inputs.app_image_url }}"
-          cmd += " --set-string deployment.image.tag=${{ inputs.app_image_version }}"
-          cmd += " --install"
-            
+          cmd="helm upgrade ${{ inputs.app_release_name }} oci://${{ inputs.helm_repository }}"
+          cmd+=" --version ${{ inputs.helm_chart_version }}"
+          cmd+=" --namespace ${{ inputs.k8s_namespace }}"
+          cmd+=" --set image.repository=${{ inputs.app_image_url }}"
+          cmd+=" --set-string image.tag=${{ inputs.app_image_version }}"
+
           if [[ -n $helm_values ]]; then
-            cmd += " --values $helm_values"
+            cmd+=" --values $helm_values"
           fi
           
-          if [[ $wait_enabled == true ]]; then
-            cmd += " --wait"
+          if [[ $wait_enabled == 'true' ]]; then
+            cmd+=" --wait"
           fi
           
-          if [[ $atomic_enabled == true ]]; then
-            cmd += " --atomic"
+          if [[ $atomic_enabled == 'true' ]]; then
+            cmd+=" --atomic"
           fi
           
+          cmd+=" --install"
             
           echo $cmd
           eval $cmd
