@@ -12,6 +12,9 @@ on:
       java_distribution:
         type: string
         default: zulu
+      pact_test_enabled:
+        type: string
+        default: 'false'
     secrets:
       pact_broker_token:
         required: true
@@ -69,6 +72,7 @@ jobs:
           overwrite: true
 
       - name: Can i deploy? (Pact verification)
+        if: ${{ inputs.pact_test_enabled == 'true' }}
         run: |
           docker run --rm --network host \
           -e PACT_BROKER_BASE_URL=${{ env.PACT_BROKER_BASE_URL }} \
