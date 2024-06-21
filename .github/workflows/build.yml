@@ -21,10 +21,20 @@ on:
       LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS:
         required: true
 
+    outputs:
+      app_sha:
+        description: "App sha"
+        value: ${{ jobs.publish.outputs.app_sha }}
+      app_version:
+        description: "App version"
+        value: ${{ jobs.publish.outputs.app_image_version }}
 jobs:
   publish:
     runs-on: ubuntu-latest
     name: ${{ inputs.version }}
+    outputs:
+      app_sha: ${{ steps.slug.outputs.sha7 }}
+      app_version: ${{ steps.slug.outputs.img_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
