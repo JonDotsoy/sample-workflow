@@ -11,26 +11,12 @@ on:
         required: true
       app_image_url:
         type: string
-        default: kata-demo-artifact-repo
         required: true
       app_release_name:
         type: string
         required: true
       k8s_namespace:
         type: string
-        required: true
-      gcp_project_id:
-        type: string
-        required: true
-      gcp_service_account:
-        type: string
-        required: true
-      gcp_cluster_name:
-        type: string
-        required: true
-      gcp_location:
-        type: string
-        default: 'us-east1'
         required: true
       helm_repository:
         type: string
@@ -49,30 +35,30 @@ on:
         type: string
         description: "Path to helm values yaml file"
         required: false
-    secrets:
-      LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS:
-        required: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to ${{ inputs.environment }}
+    name: Deploying to ${{ inputs.environment }}
+    environment:
+      name: ${{ inputs.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Configure GCP Credentials
+        id: auth
         uses: 'google-github-actions/auth@v2'
         with:
-          project_id: ${{ inputs.gcp_project_id }}
-          service_account: ${{ inputs.gcp_service_account }}
-          credentials_json: ${{ secrets.LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS }}
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
 
       - id: get-credentials
         uses: google-github-actions/get-gke-credentials@v2
         with:
-          cluster_name: ${{ inputs.gcp_cluster_name }}
-          location: ${{ inputs.gcp_location }}
+          cluster_name: ${{ vars.GCP_CLUSTER_NAME }}
+          location: ${{ vars.GCP_LOCATION }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -81,7 +67,7 @@ jobs:
         run: |
           gcloud auth application-default print-access-token | helm registry login \
             -u oauth2accesstoken \
-            --password-stdin https://${{ inputs.helm_repository }}
+            --password-stdin https://us-docker.pkg.dev
 
       - name: Deploy
         shell: bash
@@ -93,7 +79,7 @@ jobs:
           cmd="helm upgrade ${{ inputs.app_release_name }} oci://${{ inputs.helm_repository }}"
           cmd+=" --version ${{ inputs.helm_chart_version }}"
           cmd+=" --namespace ${{ inputs.k8s_namespace }}"
-          cmd+=" --set image.repository=${{ inputs.app_image_url }}"
+          cmd+=" --set image.repository=us-docker.pkg.dev/${{ inputs.app_image_url }}"
           cmd+=" --set-string image.tag=${{ inputs.app_image_version }}"
 
           if [[ -n $helm_values ]]; then
