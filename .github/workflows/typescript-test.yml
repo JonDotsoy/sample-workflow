@@ -26,7 +26,7 @@ on:
 
 env:
   NODE_VERSION: '20.x'
-  COVERAGE_REPORT_PATH: coverage/
+  COVERAGE_REPORT_FILE: coverage/
 
 jobs:
   test:
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-${{ github.run_id }}
-          path: ${{ env.COVERAGE_REPORT_PATH }}
+          path: ${{ env.COVERAGE_REPORT_FILE }}lcov.info
           retention-days: 1
           overwrite: true
 
@@ -66,13 +66,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: coverage-report-${{ github.run_id }}
-          path: ${{ env.COVERAGE_REPORT_PATH }}
+          path: ${{ env.COVERAGE_REPORT_FILE }}
 
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
           project-token: ${{ secrets.codacy_project_token }}
-          coverage-reports: ${{ env.COVERAGE_REPORT_PATH }}lcov-report/index.html
+          coverage-reports: ${{ env.COVERAGE_REPORT_FILE }}lcov.info
 
   security_audit:
     runs-on: ubuntu-latest
