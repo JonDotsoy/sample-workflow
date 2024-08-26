@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  workflow_call:
+    inputs:
+      checkmarx_break_build:
+        type: boolean
+        default: true
+    secrets:
+      codacy_project_token:
+        required: true
+      _checkmarx_url:
+        required: true
+      _checkmarx_username:
+        required: true
+      _checkmarx_password:
+        required: true
+      _checkmarx_client_secret:
+        required: true
+      _sca_tenant:
+        required: true
+      _sca_username:
+        required: true
+      _sca_password:
+        required: true
+
+env:
+  NODE_VERSION: '20.x'
+  COVERAGE_REPORT_FILE: coverage/
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - id: coverage
+        name: Generate code coverage report
+        run: npm run test:cov
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ github.run_id }}
+          path: ${{ env.COVERAGE_REPORT_FILE }}lcov.info
+          retention-days: 1
+          overwrite: true
+
+  code_coverage:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Download code coverage results
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-report-${{ github.run_id }}
+          path: ${{ env.COVERAGE_REPORT_FILE }}
+
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.codacy_project_token }}
+          coverage-reports: ${{ env.COVERAGE_REPORT_FILE }}lcov.info
+
+  security_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkmarx CxFlow Action
+        uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.9
+        with:
+          project: ${{ github.repository }}-PR
+          team: "CxServer/Liverpool/Ecommerce/Backend"
+          checkmarx_url: ${{ secrets._checkmarx_url }}
+          checkmarx_username: ${{ secrets._checkmarx_username }}
+          checkmarx_password: ${{ secrets._checkmarx_password }}
+          checkmarx_client_secret: ${{ secrets._checkmarx_client_secret }}
+          incremental: false
+          break_build: ${{ inputs.checkmarx_break_build }}
+          scanners: sca, sast
+          sca_api_url: "https://api.scacheckmarx.com"
+          sca_app_url: "https://sca.scacheckmarx.com"
+          sca_access_control_url: "https://platform.checkmarx.net"
+          sca_tenant: ${{ secrets._sca_tenant }}
+          sca_username: ${{ secrets._sca_username }}
+          sca_password: ${{ secrets._sca_password }}
+          bug_tracker: NONE
+          params: --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.head_ref }} --merge-id=${{ github.event.number }} --cx-flow.filterSeverity --cx-flow.filterCategory
