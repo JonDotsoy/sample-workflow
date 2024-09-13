@@ -58,7 +58,7 @@ jobs:
         uses: google-github-actions/get-gke-credentials@v2
         with:
           cluster_name: ${{ vars.GCP_CLUSTER_NAME }}
-          location: ${{ vars.GCP_LOCATION }}
+          location: ${{ vars.GCP_CLUSTER_LOCATION }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
