@@ -1,5 +1,9 @@
 name: Build and Publish
 
+permissions:
+  contents: 'read'
+  id-token: 'write'
+
 on:
   workflow_call:
     inputs:
@@ -9,17 +13,6 @@ on:
       app_release_name:
         type: string
         required: true
-      gcp_artifact_registry:
-        type: string
-        required: true
-      gcp_project_id:
-        type: string
-        required: true
-      gcp_service_account:
-        type: string
-    secrets:
-      LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS:
-        required: true
 
     outputs:
       app_sha:
@@ -28,9 +21,11 @@ on:
       app_version:
         description: "App version"
         value: ${{ jobs.publish.outputs.app_image_version }}
+
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: composable_gcp_ecommerce
     name: ${{ inputs.version }}
     outputs:
       app_sha: ${{ steps.slug.outputs.sha7 }}
@@ -46,23 +41,25 @@ jobs:
           echo "img_version=$(grep appVersion "./gradle.properties" | cut -d '=' -f2)" >> $GITHUB_OUTPUT
 
       - name: Configure GCP Credentials
-        uses: google-github-actions/auth@v2
+        id: auth
+        uses: 'google-github-actions/auth@v2'
         with:
-          project_id: ${{ inputs.project_id }}
-          service_account: ${{ inputs.service_account }}
-          credentials_json: ${{ secrets.LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS }}
+          token_format: access_token
+          project_id: ${{ vars.GCP_REGISTRY_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_REGISTRY_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_REGISTRY_SERVICE_ACCOUNT }}
 
       - name: Login to GCP Artifact Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ inputs.gcp_artifact_registry }}
-          username: _json_key
-          password: ${{ secrets.LIVERPOOL_GOOGLE_APPLICATION_CREDENTIALS }}
+          registry: us-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
 
       - name: Build, tag and push
         uses: docker/build-push-action@v5
         env:
-          IMAGE_URL: ${{ inputs.gcp_artifact_registry }}/${{ inputs.app_release_name }}
+          IMAGE_URL: us-docker.pkg.dev/${{ vars.GCP_ARTIFACT_REGISTRY }}/${{ inputs.app_release_name }}
         with:
           push: true
           tags: ${{ env.IMAGE_URL }}:latest,${{ env.IMAGE_URL }}:${{ steps.slug.outputs.sha7 }},${{ env.IMAGE_URL }}:${{ inputs.app_version }}
