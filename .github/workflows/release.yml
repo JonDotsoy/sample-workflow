@@ -38,8 +38,9 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
     name: Deploying to ${{ inputs.environment }}
+    runs-on:
+      group: composable_gcp_ecommerce
     environment:
       name: ${{ inputs.environment }}
     steps:

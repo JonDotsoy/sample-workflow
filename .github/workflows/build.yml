@@ -24,7 +24,8 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on:
+      group: composable_gcp_ecommerce
     name: ${{ inputs.version }}
     outputs:
       app_sha: ${{ steps.slug.outputs.sha7 }}
