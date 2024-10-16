@@ -13,6 +13,9 @@ on:
       app_release_name:
         type: string
         required: true
+      extra_build_args:
+        type: string
+        required: false
 
     outputs:
       app_sha:
@@ -69,3 +72,4 @@ jobs:
             docker_image=${{ inputs.app_release_name }}:${{ steps.slug.outputs.sha7 }}
             IMAGE_VERSION=${{ steps.slug.outputs.img_version }}
             BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
+            ${{ inputs.extra_build_args || '' }}
