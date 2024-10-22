@@ -32,23 +32,16 @@ env:
   NODE_VERSION: '20.x'
 
 jobs:
-  versioning:
-    runs-on: ubuntu-latest
+  # versioning:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v4
-        with:
-          branch: feature/javascript-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
   release:
-    needs:
-      - versioning
+    # needs:
+    #   - versioning
 
     runs-on: ubuntu-latest
 
@@ -73,4 +66,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - run: npm publish
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          branch: feature/javascript-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - run: npm publish
