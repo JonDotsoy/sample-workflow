@@ -1,5 +1,7 @@
 {
-    "name": "@scope/myapp",
+    "name": "@inkybrowser-npm/sample-app",
+    "version": "1.0.0",
+    "description": "abc",
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
     }
