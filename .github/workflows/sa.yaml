@@ -13,3 +13,7 @@ jobs:
     uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@demo-v1
     with:
       branch: feature/javascript-release
+      scope: "@inkybrowser-npm"
+      location: us-east1
+      project_id: jondotsoy
+      repository_id: inkybrowser-npm
