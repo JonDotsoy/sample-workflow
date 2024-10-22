@@ -55,6 +55,8 @@ jobs:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
       
       - run: gcloud auth application-default login
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
       - run: npx google-artifactregistry-auth
       - run: |
           gcloud artifacts print-settings npm \
