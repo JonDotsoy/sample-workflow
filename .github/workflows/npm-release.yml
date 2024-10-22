@@ -56,7 +56,6 @@ jobs:
 
       - name: Configure NPMRC file
         run: |
-          touch .npmrc
           "${{ inputs.scope }}:registry=https://${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/" >> .npmrc
           "//${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/:always-auth=true" >> .npmrc
 
