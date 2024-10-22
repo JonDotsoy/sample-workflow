@@ -27,7 +27,6 @@ on:
 
 env:
   NODE_VERSION: '20.x'
-  COVERAGE_REPORT_FILE: coverage/
 
 jobs:
   release:
@@ -48,7 +47,7 @@ jobs:
         with:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
 
-      # update .npmrc file
+      # Update the .npmrc file with the token autorization
       - run: npx google-artifactregistry-auth
 
       - name: Install dependencies

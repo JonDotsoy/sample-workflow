@@ -2,13 +2,38 @@
 
 Action `Servicios-Liverpool-Infraestructura/dig_gh_workflows/.github/workflows/npm-release.yml@v1`
 
+This action upgrade versions on package.json and publishes them to Artifact Registry.
+
 ## Inputs
 
 - 
 
 ## Usage
 
-In your [workflow file](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) add the `uses` property `Servicios-Liverpool-Infraestructura/dig_gh_workflows/.github/workflows/npm-release.yml@v1` in the job.
+### Configure `.npmrc`
+
+> [!INFORMATION]
+> You can skip this step if your `.npmrc` file is already configured.
+
+Add the following template to your `.npmrc` file, in the same directory as your `package.json` file. Replace the parameters according to your Artifact Registry repository settings.
+
+**Parameters:**
+
+- `{{@SCOPE}}`: The scope of the package, typically an organization or user name.
+- `{{LOCATION}}`: The Google Cloud region where your Artifact Registry repository is located.
+- `{{PROJECT}}`: The Google Cloud project ID that hosts your Artifact Registry repository.
+- `{{REPOSITORY}}`: The name of your Artifact Registry repository.
+
+```
+{{@SCOPE}}:registry=https://{{LOCATION}}-npm.pkg.dev/{{PROJECT}}/{{REPOSITORY}}/
+//{{LOCATION}}-npm.pkg.dev/{{PROJECT}}/{{REPOSITORY}}/:always-auth=true
+```
+
+Read more about `.npmrc` file [here](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
+
+### Usage the action in a workflow
+
+To use the action, add the the `uses` property `Servicios-Liverpool-Infraestructura/dig_gh_workflows/.github/workflows/npm-release.yml@v1` in the job.
 
 **Sample (minimal configuration):**
 
