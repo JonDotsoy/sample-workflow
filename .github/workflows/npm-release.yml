@@ -5,9 +5,26 @@ on:
     inputs:
       branch:
         default: main
-        required: false
         type: string
-        description: Branch to release from.
+        required: false
+        description: The branch to release from.
+      scope:
+        type: string
+        required: true
+        description: The scope of the NPM package.
+      location:
+        type: string
+        required: true
+        description: The location of the Artifact Registry repository.
+      project_id:
+        type: string
+        required: true
+        description: The ID of the Google Cloud project.
+      repository_id:
+        type: string
+        required: true
+        description: The ID of the Artifact Registry repository.
+
 
 permissions:
   contents: write
@@ -36,6 +53,12 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
+
+      - name: Configure NPMRC file
+        run: |
+          touch .npmrc
+          ${{ inputs.scope }}:registry=https://${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/ >> .npmrc
+          //${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/:always-auth=true >> .npmrc
 
       # Update the .npmrc file with the token autorization
       - run: npx google-artifactregistry-auth
