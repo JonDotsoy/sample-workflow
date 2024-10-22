@@ -25,13 +25,28 @@ on:
   #     _sca_password:
   #       required: true
 
+permissions:
+  contents: write
+
 env:
   NODE_VERSION: '20.x'
 
 jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   release:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
