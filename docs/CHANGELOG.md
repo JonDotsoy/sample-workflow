@@ -1,3 +1,19 @@
+## [0.1.1](https://github.com/JonDotsoy/sample-workflow/compare/v0.1.0...v0.1.1) (2024-10-22)
+
+
+### Bug Fixes
+
+* wip ([206479c](https://github.com/JonDotsoy/sample-workflow/commit/206479cc41b21301f40fea4c9dd566f8da2d9a90))
+* wip ([7f49d83](https://github.com/JonDotsoy/sample-workflow/commit/7f49d83b4e18c5c95281b54478d365cc4e1bf112))
+* wip ([f4ccf0b](https://github.com/JonDotsoy/sample-workflow/commit/f4ccf0b782fb9605f7d2deebbe5de14dfe29993b))
+* wip ([75adc81](https://github.com/JonDotsoy/sample-workflow/commit/75adc810c398fcceaebae187899a557136c9e6ed))
+* wip ([8e275db](https://github.com/JonDotsoy/sample-workflow/commit/8e275db8e93468eb289008ba70333d2497da75ad))
+* wip ([d4fb36d](https://github.com/JonDotsoy/sample-workflow/commit/d4fb36dfcc5347097bceb285cb17aae277acd410))
+* wip ([5db2439](https://github.com/JonDotsoy/sample-workflow/commit/5db2439966dacf900f1a5e62e2d579bbc968f276))
+* wip ([6d82225](https://github.com/JonDotsoy/sample-workflow/commit/6d822254733efd22b6f1ecda6435f9b8d27fc7eb))
+* wip ([177bcae](https://github.com/JonDotsoy/sample-workflow/commit/177bcae7dfcf8bc6d36b1965087ce0dd5cce0d5b))
+* wip ([420a4e0](https://github.com/JonDotsoy/sample-workflow/commit/420a4e00426cd811380a0126c65a4438e51fe340))
+
 # [0.1.0](https://github.com/JonDotsoy/sample-workflow/compare/v0.0.9...v0.1.0) (2024-10-22)
 
 
