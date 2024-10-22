@@ -51,7 +51,7 @@ jobs:
         with:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
       
-      - run: gcloud artifacts print-settings npm
+      - run: gcloud artifacts print-settings npm --repository inkybrowser-npm --scope @inkybrowser-npm
 
   # test:
   #   runs-on: ubuntu-latest
