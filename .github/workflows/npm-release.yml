@@ -32,14 +32,13 @@ env:
 jobs:
   a:
     runs-on: ubuntu
+    
     steps:
       - name: Configure GCP Credentials
         id: auth
         uses: 'google-github-actions/auth@v2'
         with:
-          project_id: ${{ vars.GCP_PROJECT_ID }}
-          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          credentials_json: ${{ vars.JSON_CREDENTIALS }}
   # test:
   #   runs-on: ubuntu-latest
   #   steps:
