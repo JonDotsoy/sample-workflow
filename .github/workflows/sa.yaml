@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@demo-v1
+    uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@demo-v2
     with:
       branch: feature/javascript-release
       scope: "@inkybrowser-npm"
