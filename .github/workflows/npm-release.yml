@@ -53,8 +53,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
-      
-      - run: gcloud auth application-default login --quiet
+
       - run: npx google-artifactregistry-auth
       - run: |
           gcloud artifacts print-settings npm \
