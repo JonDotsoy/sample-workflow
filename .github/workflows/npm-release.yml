@@ -51,6 +51,7 @@ jobs:
         with:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
       
+      - run: npx google-artifactregistry-auth
       - run: |
           gcloud artifacts print-settings npm \
             --project=jondotsoy \
