@@ -1,5 +1,8 @@
 {
     "name": "@inkybrowser-npm/sample-app",
     "version": "1.0.1",
-    "description": "abc"
+    "description": "abc",
+    "keywords": [
+        "a"
+    ]
 }
