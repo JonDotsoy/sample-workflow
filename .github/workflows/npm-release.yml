@@ -1,29 +1,13 @@
 name: Publish NPM
 
 on:
-  push: {}
-  # workflow_call:
-  #   inputs:
-  #     checkmarx_break_build:
-  #       type: boolean
-  #       default: true
-  #   secrets:
-  #     codacy_project_token:
-  #       required: true
-  #     _checkmarx_url:
-  #       required: true
-  #     _checkmarx_username:
-  #       required: true
-  #     _checkmarx_password:
-  #       required: true
-  #     _checkmarx_client_secret:
-  #       required: true
-  #     _sca_tenant:
-  #       required: true
-  #     _sca_username:
-  #       required: true
-  #     _sca_password:
-  #       required: true
+  workflow_call:
+    inputs:
+      branch:
+        default: main
+        required: false
+        type: string
+        description: Branch to release from.
 
 permissions:
   contents: write
