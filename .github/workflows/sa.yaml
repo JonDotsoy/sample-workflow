@@ -4,9 +4,4 @@ on: push
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@vdemo
+    uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@vdemo
