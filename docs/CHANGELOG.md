@@ -1,3 +1,15 @@
+# [0.1.0](https://github.com/JonDotsoy/sample-workflow/compare/v0.0.9...v0.1.0) (2024-10-22)
+
+
+### Bug Fixes
+
+* wip ([fb8f2ca](https://github.com/JonDotsoy/sample-workflow/commit/fb8f2cae3d87c5fd64e2833904ed45b86e875dba))
+
+
+### Features
+
+* add support for extra build arguments in CI configuration ([1248203](https://github.com/JonDotsoy/sample-workflow/commit/12482035a42565baff7413597cdaff68a688c854))
+
 # [1.2.0](https://github.com/JonDotsoy/sample-workflow/compare/v1.1.5...v1.2.0) (2024-10-22)
 
 
