@@ -25,9 +25,9 @@ on:
   #     _sca_password:
   #       required: true
 
-env:
-  NODE_VERSION: '20.x'
-  COVERAGE_REPORT_FILE: coverage/
+# env:
+#   NODE_VERSION: '20.x'
+#   COVERAGE_REPORT_FILE: coverage/
 
 jobs:
   a:
