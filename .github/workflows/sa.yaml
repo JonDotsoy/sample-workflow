@@ -10,6 +10,6 @@ permissions:
 
 jobs:
   release:
-    uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@vdemo
+    uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@demo-v1
     with:
       branch: feature/javascript-release
