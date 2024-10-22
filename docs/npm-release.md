@@ -21,12 +21,12 @@ Add the following template to your `.npmrc` file, in the same directory as your 
 
 - `{{@SCOPE}}`: The scope of the package, typically an organization or user name.
 - `{{LOCATION}}`: The Google Cloud region where your Artifact Registry repository is located.
-- `{{PROJECT}}`: The Google Cloud project ID that hosts your Artifact Registry repository.
-- `{{REPOSITORY}}`: The name of your Artifact Registry repository.
+- `{{PROJECT_ID}}`: The Google Cloud project ID that hosts your Artifact Registry repository.
+- `{{REPOSITORY_ID}}`: The name of your Artifact Registry repository.
 
 ```
-{{@SCOPE}}:registry=https://{{LOCATION}}-npm.pkg.dev/{{PROJECT}}/{{REPOSITORY}}/
-//{{LOCATION}}-npm.pkg.dev/{{PROJECT}}/{{REPOSITORY}}/:always-auth=true
+{{@SCOPE}}:registry=https://{{LOCATION}}-npm.pkg.dev/{{PROJECT_ID}}/{{REPOSITORY_ID}}/
+//{{LOCATION}}-npm.pkg.dev/{{PROJECT_ID}}/{{REPOSITORY_ID}}/:always-auth=true
 ```
 
 Read more about `.npmrc` file [here](https://docs.npmjs.com/cli/v10/configuring-npm/npmrc).
