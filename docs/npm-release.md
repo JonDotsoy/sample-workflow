@@ -2,7 +2,7 @@
 
 Action `Servicios-Liverpool-Infraestructura/dig_gh_workflows/.github/workflows/npm-release.yml@v1`
 
-## Properties
+## Inputs
 
 - 
 
