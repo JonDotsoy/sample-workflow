@@ -1,3 +1,10 @@
+## [0.1.2](https://github.com/JonDotsoy/sample-workflow/compare/v0.1.1...v0.1.2) (2024-10-22)
+
+
+### Bug Fixes
+
+* wip ([cf153f7](https://github.com/JonDotsoy/sample-workflow/commit/cf153f7380281e60d8797ebd482ef5002a87ecc9))
+
 ## [0.1.1](https://github.com/JonDotsoy/sample-workflow/compare/v0.1.0...v0.1.1) (2024-10-22)
 
 
