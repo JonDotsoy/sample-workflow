@@ -1,6 +1,8 @@
 name: demo release
 
-on: push
+on: 
+  push:
+    paths: app
 
 permissions:
   contents: write
