@@ -54,13 +54,6 @@ jobs:
         with:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
 
-      
-      - run: |
-          gcloud artifacts print-settings npm \
-            --project=jondotsoy \
-            --repository=inkybrowser-npm \
-            --location=us-east1 \
-            --scope @inkybrowser-npm
       - run: npx google-artifactregistry-auth
 
   # test:
