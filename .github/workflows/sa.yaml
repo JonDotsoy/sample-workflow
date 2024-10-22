@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: ./npm-release.yaml
+      - uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@vdemo
