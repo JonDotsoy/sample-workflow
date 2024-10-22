@@ -45,6 +45,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
+    needs:
+      - versioning
+
     runs-on: ubuntu-latest
 
     steps:
