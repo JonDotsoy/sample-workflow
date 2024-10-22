@@ -56,8 +56,8 @@ jobs:
 
       - name: Configure NPMRC file
         run: |
-          "${{ inputs.scope }}:registry=https://${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/" >> .npmrc
-          "//${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/:always-auth=true" >> .npmrc
+          echo "${{ inputs.scope }}:registry=https://${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/" >> .npmrc
+          echo "//${{ inputs.location }}-npm.pkg.dev/${{ inputs.project_id }}/${{ inputs.repository_id }}/:always-auth=true" >> .npmrc
 
       # Update the .npmrc file with the token autorization
       - run: npx google-artifactregistry-auth
