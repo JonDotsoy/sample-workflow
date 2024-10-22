@@ -1,0 +1,6 @@
+{
+    "name": "@scope/myapp",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    }
+}
