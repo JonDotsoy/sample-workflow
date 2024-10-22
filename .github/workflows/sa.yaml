@@ -2,6 +2,12 @@ name: demo release
 
 on: push
 
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
 jobs:
   release:
     uses: JonDotsoy/sample-workflow/.github/workflows/npm-release.yml@vdemo
