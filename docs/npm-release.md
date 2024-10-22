@@ -6,7 +6,17 @@ This action upgrade versions on package.json and publishes them to Artifact Regi
 
 ## Inputs
 
-- 
+- `branch`: default is main
+
+## Permisions Required
+
+```yaml
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+```
 
 ## Usage
 
@@ -39,6 +49,12 @@ To use the action, add the the `uses` property `Servicios-Liverpool-Infraestruct
 
 ```yaml
 name: release this lib
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
 
 jobs:
   release:
