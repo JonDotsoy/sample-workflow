@@ -1,6 +1,6 @@
 {
     "name": "@inkybrowser-npm/sample-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "abc",
     "publishConfig": {
         "registry": "https://us-east1-npm.pkg.dev/jondotsoy/inkybrowser-npm/"
