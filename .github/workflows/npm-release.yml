@@ -28,6 +28,8 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
+  actions: write
 
 env:
   NODE_VERSION: '20.x'
