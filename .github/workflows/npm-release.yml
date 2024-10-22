@@ -25,20 +25,24 @@ on:
   #     _sca_password:
   #       required: true
 
-# env:
-#   NODE_VERSION: '20.x'
-#   COVERAGE_REPORT_FILE: coverage/
+env:
+  NODE_VERSION: '20.x'
+  COVERAGE_REPORT_FILE: coverage/
 
 jobs:
-  a:
-    runs-on: ubuntu
+  release:
+    runs-on: ubuntu-latest
     
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Configure GCP Credentials
         id: auth
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ vars.JSON_CREDENTIALS }}
+
   # test:
   #   runs-on: ubuntu-latest
   #   steps:
