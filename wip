@@ -1,0 +1,4 @@
+#!/bin/sh
+
+git commit -n --allow-empty -m "wip"
+git push
