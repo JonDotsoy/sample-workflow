@@ -9,8 +9,17 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       #  semantic-release-bot <semantic-release-bot@martynus.net>
       - run: |
           git config set user.name semantic-release-bot
           git config set user.email semantic-release-bot@martynus.net
+
+          date > date
+
+          git add date
+          git commit -n -m "update date file"
+          git push
       
