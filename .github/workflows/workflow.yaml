@@ -1,0 +1,16 @@
+name: demo release
+
+on: push
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      #  semantic-release-bot <semantic-release-bot@martynus.net>
+      - run: |
+          git config set user.name semantic-release-bot
+          git config set user.email semantic-release-bot@martynus.net
+      
