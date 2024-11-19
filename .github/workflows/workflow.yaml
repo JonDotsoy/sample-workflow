@@ -19,7 +19,7 @@ jobs:
 
           date > date
 
-          git pull -r
+          git pull -r || true
           git add date
           git commit -n -m "update date file"
           git push
