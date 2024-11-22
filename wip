@@ -3,5 +3,6 @@
 set -e
 
 git pull -r || true
+git add .
 git commit -n --allow-empty -m "wip"
 git push
