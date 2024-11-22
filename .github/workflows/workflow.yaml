@@ -6,21 +6,31 @@ permissions:
   contents: write
 
 jobs:
-  matrix:
+  setup_provider:
     runs-on: ubuntu-latest
-    outputs:
-      rand: ${{ steps.rand.outputs.rand }}
-    strategy:
-      matrix:
-        n:
-          - 1
-          - 2
+    env:
+      environment: |
+        - Plan-Development
+        - Plan-QA
+      #  - Plan-Production
     steps:
-      - run: echo "rand=${{ matrix.n }}" > "$GITHUB_OUTPUT"
-        id: rand
-  release:
-    runs-on: ubuntu-latest
-    needs: 
-      - matrix
-    steps:
-      - run: echo ${{ toJson(needs) }}
+      - run: yq $environment
+
+  # matrix:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     rand: ${{ steps.rand.outputs.rand }}
+  #   strategy:
+  #     matrix:
+  #       n:
+  #         - 1
+  #         - 2
+  #   steps:
+  #     - run: echo "rand=${{ matrix.n }}" > "$GITHUB_OUTPUT"
+  #       id: rand
+  # release:
+  #   runs-on: ubuntu-latest
+  #   needs: 
+  #     - matrix
+  #   steps:
+  #     - run: echo ${{ toJson(needs) }}
