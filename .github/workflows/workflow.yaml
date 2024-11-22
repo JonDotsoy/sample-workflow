@@ -18,4 +18,4 @@ jobs:
     needs: 
       - matrix
     steps:
-      - run: echo ${{ toJson(needs.matrix.outputs.rand) }}
+      - run: echo ${{ toJson(needs.matrix.outputs) }}
