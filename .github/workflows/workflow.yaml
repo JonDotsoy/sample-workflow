@@ -26,7 +26,6 @@ jobs:
     strategy:
       matrix:
         environment: ${{ fromJson(needs.setup_envs.outputs.environment_json) }}
-
     steps:
       - run: echo ${{ matrix.environment }}
 
