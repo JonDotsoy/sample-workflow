@@ -16,7 +16,7 @@ jobs:
         - Plan-QA
       #  - Plan-Production
     steps:
-      - run: echo "$environment" | yq '. | @json | @sh | "environment_json=" + .' -r > "$GITHUB_OUTPUT"
+      - run: echo "$environment" | yq '. | @json | "environment_json=" + .' -r > "$GITHUB_OUTPUT"
         id: parse_environment_json
 
   by_matrix:
