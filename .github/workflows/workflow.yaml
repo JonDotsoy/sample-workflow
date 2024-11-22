@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       rand: ${{ steps.rand.outputs.rand }}
+    strategy:
+      matrix:
+        n:
+          - 1
+          - 2
     steps:
       - run: echo "rand=$RANDOM" > "$GITHUB_OUTPUT"
         id: rand
