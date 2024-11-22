@@ -23,4 +23,4 @@ jobs:
     needs: 
       - matrix
     steps:
-      - run: echo ${{ toJson(needs.matrix.result) }}
+      - run: echo ${{ toJson(needs) }}
