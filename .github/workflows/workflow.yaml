@@ -12,9 +12,12 @@ jobs:
       environment_json: ${{ steps.parse_environment_json.outputs.environment_json }}
     env:
       environment: |
-        - Plan-Development
-        - Plan-QA
-      #  - Plan-Production
+        - environment: Plan-Development
+          source_path: k8s-admin
+        - environment: Plan-QA
+          source_path: k8s-admin
+      #  - environment: Plan-Production
+      #    source_path: k8s-admin
     steps:
       - run: echo "$environment" | yq '. | @json | "environment_json=" + .' -r > "$GITHUB_OUTPUT"
         id: parse_environment_json
