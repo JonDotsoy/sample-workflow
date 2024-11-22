@@ -9,9 +9,9 @@ jobs:
   setup_envs:
     runs-on: ubuntu-latest
     outputs:
-      environment_json: ${{ steps.parse_environment_json.outputs.environment_json }}
+      environment_options_json: ${{ steps.parse_environment_options_json.outputs.environment_options_json }}
     env:
-      environment: |
+      environment_options: |
         - environment: Plan-Development
           source_path: k8s-admin
         - environment: Plan-QA
@@ -19,8 +19,8 @@ jobs:
       #  - environment: Plan-Production
       #    source_path: k8s-admin
     steps:
-      - run: echo "$environment" | yq '. | @json | "environment_json=" + .' -r > "$GITHUB_OUTPUT"
-        id: parse_environment_json
+      - run: echo "$environment_options" | yq '. | @json | "environment_options_json=" + .' -r > "$GITHUB_OUTPUT"
+        id: parse_environment_options_json
 
   by_matrix:
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
       - setup_envs
     strategy:
       matrix:
-        environment: ${{ fromJson(needs.setup_envs.outputs.environment_json) }}
+        environment: ${{ fromJson(needs.setup_envs.outputs.environment_options_json) }}
     steps:
       - run: echo ${{ matrix.environment }}
 
