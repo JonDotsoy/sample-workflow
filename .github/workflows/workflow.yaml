@@ -16,7 +16,7 @@ jobs:
           - 1
           - 2
     steps:
-      - run: echo "rand=$RANDOM" > "$GITHUB_OUTPUT"
+      - run: echo "rand=${{ matrix.n }}" > "$GITHUB_OUTPUT"
         id: rand
   release:
     runs-on: ubuntu-latest
