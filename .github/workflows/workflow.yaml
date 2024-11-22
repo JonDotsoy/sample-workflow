@@ -5,6 +5,10 @@ on: push
 permissions:
   contents: write
 
+concurrency:
+  group: a
+  cancel-in-progress: true
+
 jobs:
   setup_environment_options:
     runs-on: ubuntu-latest
