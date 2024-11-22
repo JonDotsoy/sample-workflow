@@ -14,7 +14,7 @@ jobs:
         - Plan-QA
       #  - Plan-Production
     steps:
-      - run: echo $environment | yq
+      - run: echo "$environment" | yq '.'
 
   # matrix:
   #   runs-on: ubuntu-latest
